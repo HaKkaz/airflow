@@ -218,6 +218,13 @@ repos:
         files: ^airflow/models/taskinstance.py$|^airflow/models/taskinstancehistory.py$
         pass_filenames: false
         require_serial: true
+      - id: check-deferrable-default
+        name: Check and fix default value of default_deferrable
+        language: python
+        entry: ./scripts/ci/pre_commit/check_deferrable_default.py
+        pass_filenames: false
+        additional_dependencies: ["libcst>=1.4.0"]
+        files: ^airflow/.*/sensors/.*\.py$|^airflow/.*/operators/.*\.py$
   - repo: https://github.com/asottile/blacken-docs
     rev: 1.18.0
     hooks:
@@ -581,8 +588,9 @@ repos:
           (?x)
           ^airflow/api_connexion/openapi/v1.yaml$|
           ^airflow/ui/openapi-gen/|
-          ^airflow/cli/commands/webserver_command.py$|
           ^airflow/cli/commands/internal_api_command.py$|
+          ^airflow/cli/commands/ui_api_command.py$|
+          ^airflow/cli/commands/webserver_command.py$|
           ^airflow/config_templates/|
           ^airflow/models/baseoperator.py$|
           ^airflow/operators/__init__.py$|
@@ -1164,12 +1172,6 @@ repos:
         pass_filenames: true
         files: \.py$
         exclude: ^airflow/providers|^dev/.*\.py$|^scripts/.*\.py$|^tests/|^\w+_tests/|^docs/.*\.py$|^airflow/utils/helpers.py$|^hatch_build.py$
-      - id: check-deferrable-default-value
-        name: Check default value of deferrable attribute
-        language: python
-        entry: ./scripts/ci/pre_commit/check_deferrable_default.py
-        pass_filenames: false
-        files: ^airflow/.*/sensors/.*\.py$|^airflow/.*/operators/.*\.py$
       - id: check-provider-docs-valid
         name: Validate provider doc files
         entry: ./scripts/ci/pre_commit/check_provider_docs.py
