@@ -812,9 +812,7 @@
     ],
     "devel-deps": [],
     "plugins": [],
-    "cross-providers-deps": [
-      "telegram"
-    ],
+    "cross-providers-deps": [],
     "excluded-python-versions": [],
     "state": "ready"
   },
