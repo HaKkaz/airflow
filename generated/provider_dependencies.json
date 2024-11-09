@@ -810,6 +810,17 @@
     "excluded-python-versions": [],
     "state": "ready"
   },
+  "line": {
+    "deps": [
+      "apache-airflow>=2.8.0",
+      "line-bot-sdk>=3.14.0"
+    ],
+    "devel-deps": [],
+    "plugins": [],
+    "cross-providers-deps": [],
+    "excluded-python-versions": [],
+    "state": "ready"
+  },
   "microsoft.azure": {
     "deps": [
       "adal>=1.2.7",
