@@ -128,7 +128,7 @@ class LineHook(BaseHook):
         """
         Send the message to a line chat or group.
 
-        :param api_params: params for line_instance.push_message. It can also be used to override chat_id
+        :param api_params: params for PushMessageRequest. It can also be used to override chat_id.
         """
         kwargs: dict[str, str | list[TextMessage]] = {}
 
@@ -142,6 +142,7 @@ class LineHook(BaseHook):
         if kwargs.get("chat_id") is None:
             raise AirflowException("'chat_id' must be provided for line message")
 
+        kwargs["to"] = kwargs.pop("chat_id")
         kwargs["messages"] = [TextMessage(text=message) for message in kwargs["messages"]]
 
         response = self.connection.push_message(
