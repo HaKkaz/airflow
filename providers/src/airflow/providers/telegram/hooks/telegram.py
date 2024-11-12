@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import asyncio
+from pathlib import Path
 from typing import Any
 
 import telegram
@@ -157,4 +158,30 @@ class TelegramHook(BaseHook):
             raise AirflowException("'chat_id' must be provided for telegram message")
 
         response = asyncio.run(self.connection.send_message(**kwargs))
+        self.log.debug(response)
+
+    @tenacity.retry(
+        retry=tenacity.retry_if_exception_type(telegram.error.TelegramError),
+        stop=tenacity.stop_after_attempt(5),
+        wait=tenacity.wait_fixed(1),
+    )
+    def send_file(
+        self,
+        file: str | Path,
+        **api_params,
+    ) -> None:
+        """
+        Send the file to a telegram channel or chat.
+
+        :param api_params: params for telegram_instance.send_document. It can also be used to override chat_id
+        """
+        kwargs: dict[str, Any] = {}
+
+        if self.chat_id is not None:
+            kwargs["chat_id"] = self.chat_id
+        kwargs.update(api_params)
+
+        kwargs["document"] = file
+
+        response = asyncio.run(self.connection.send_document(**kwargs))
         self.log.debug(response)
